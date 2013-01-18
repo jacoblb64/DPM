@@ -60,6 +60,7 @@ public class BangBangController implements UltrasonicController{
 		else { //too close
 			rightMotor.setSpeed(motorLow - 50);
 			leftMotor.setSpeed(motorHigh);
+			// added a comment to test Git
 		}
 		
 	}
