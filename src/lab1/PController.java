@@ -1,6 +1,5 @@
 package lab1;
 
-import lejos.nxt.NXTRegulatedMotor;
 import lejos.nxt.*;
 
 public class PController implements UltrasonicController {
@@ -40,6 +39,28 @@ public class PController implements UltrasonicController {
 			this.distance = distance;
 		}
 		// TODO: process a movement based on the us distance passed in (P style)
+		
+		double error = this.distance - bandCenter;
+		int differential = (int) Math.abs( 5*error );
+		differential %= 500;
+		
+		LCD.drawString("Error:" + error, 0, 3);
+		LCD.drawString("Differential: " + differential, 0, 4);
+		LCD.drawString("Rwsp:" + rightMotor.getSpeed(), 0, 5);
+		LCD.drawString("Lwsp:" + leftMotor.getSpeed(), 0, 6);
+		
+		if(Math.abs(error) <= bandwith) {
+			rightMotor.setSpeed(motorStraight);
+			leftMotor.setSpeed(motorStraight);
+		}
+		else if(error > 0) { //too far
+			rightMotor.setSpeed(motorStraight + differential);
+			leftMotor.setSpeed(motorStraight - 2*differential);
+		}
+		else { //too close
+			rightMotor.setSpeed(motorStraight - 2*differential);
+			leftMotor.setSpeed(motorStraight + differential);
+		}
 		
 	}
 
