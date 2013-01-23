@@ -22,7 +22,7 @@ public class Lab1 {
 		int option = 0;
 		Printer.printMainMenu();
 		while (option == 0)
-			option = Button.waitForPress();
+			option = Button.waitForPress(); //command for v0.9.0, causes errors for v0.9.1
 		
 		// Setup controller objects
 		BangBangController bangbang = new BangBangController(bandCenter, bandWidth, motorLow, motorHigh);
@@ -56,7 +56,7 @@ public class Lab1 {
 		printer.start();
 		
 		//Wait for another button press to exit
-		Button.waitForPress();
+		Button.waitForPress(); //command for v0.9.0, causes errors for v0.9.1
 		System.exit(0);
 		
 	}
