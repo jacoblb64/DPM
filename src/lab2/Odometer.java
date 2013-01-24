@@ -1,5 +1,7 @@
 package lab2;
 
+import lejos.nxt.Motor;
+
 /*
  * Odometer.java
  */
@@ -26,13 +28,33 @@ public class Odometer extends Thread {
 	public void run() {
 		long updateStart, updateEnd;
 
+		double[] sums = new double[3]; // vector of moving sums, for (x, y, theta)
+		//treating initial position as (0, 0, 0)
+		
+		double lambda = 0.0, rho = 0.0, delTheta, delC, temp;
+		
+		Motor.A.resetTachoCount(); Motor.C.resetTachoCount(); //resetting tacho counts
+		
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			// TODO: put (some of) your odometer code here
+			
+			temp = ((rho - Motor.C.getTachoCount()) - (lambda - Motor.A.getTachoCount()) ) * (Constants.WHEEL_RADIUS);
+			delTheta = temp / Constants.ROBOT_WIDTH;
+			delC = temp / 2;
+			rho = Motor.C.getTachoCount(); lambda = Motor.A.getTachoCount();
+			
+			
+			sums[2] += delTheta;
+			temp = sums[2] + delTheta / 2;
+			sums[1] += delC * Math.sin(temp);
+			sums[0] += delC * Math.cos(temp);
 
 			synchronized (lock) {
 				// don't use the variables x, y, or theta anywhere but here!
-				theta = -0.7376;
+				this.x = sums[0];
+				this.y = sums[1];
+				this.theta = sums[2];
 			}
 
 			// this ensures that the odometer only runs once every period

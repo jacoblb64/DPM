@@ -4,7 +4,10 @@ package lab2;
  * Lab2.java
  */
 
-import lejos.nxt.*;
+import lejos.nxt.Button;
+import lejos.nxt.LCD;
+import lejos.nxt.Motor;
+import lejos.nxt.NXTRegulatedMotor;
 
 public class Lab2 {
 	public static void main(String[] args) {
@@ -28,7 +31,7 @@ public class Lab2 {
 
 			//buttonChoice = Button.waitForPress();
 			buttonChoice = Button.waitForAnyPress();
-			//depends on the version
+			//*depends on the version
 		} while (buttonChoice != Button.ID_LEFT
 				&& buttonChoice != Button.ID_RIGHT);
 
@@ -51,14 +54,14 @@ public class Lab2 {
 			// spawn a new Thread to avoid SquareDriver.drive() from blocking
 			(new Thread() {
 				public void run() {
-					SquareDriver.drive(Motor.A, Motor.B, 2.8, 2.8, 15.24);
+					SquareDriver.drive(Motor.A, Motor.C, Constants.WHEEL_RADIUS, Constants.WHEEL_RADIUS, Constants.ROBOT_WIDTH);
 				}
 			}).start();
 		}
 		
 		//while (Button.waitForPress() != Button.ID_ESCAPE);
 		while (Button.waitForAnyPress() != Button.ID_ESCAPE);
-		//depends on the version
+		//*depends on the version
 		System.exit(0);
 	}
 }

@@ -3,6 +3,7 @@ package lab2;
 /*
  * SquareDriver.java
  */
+
 import lejos.nxt.*;
 
 public class SquareDriver {
