@@ -3,6 +3,7 @@ package lab2;
 /*
  * Lab2.java
  */
+
 import lejos.nxt.*;
 
 public class Lab2 {
