@@ -1,5 +1,6 @@
 package lab2;
 
+import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 
 /*
@@ -22,6 +23,8 @@ public class Odometer extends Thread {
 		y = 0.0;
 		theta = 0.0;
 		lock = new Object();
+		
+		Motor.A.resetTachoCount(); Motor.C.resetTachoCount(); //resetting tacho counts
 	}
 
 	// run method (required for Thread)
@@ -31,30 +34,47 @@ public class Odometer extends Thread {
 		double[] sums = new double[3]; // vector of moving sums, for (x, y, theta)
 		//treating initial position as (0, 0, 0)
 		
-		double lambda = 0.0, rho = 0.0, delTheta, delC, temp;
+		double lambda = 0.0, rho = 0.0, delTheta, delC, temp1, temp2;
 		
-		Motor.A.resetTachoCount(); Motor.C.resetTachoCount(); //resetting tacho counts
+		
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			// TODO: put (some of) your odometer code here
 			
-			temp = ((rho - Motor.C.getTachoCount()) - (lambda - Motor.A.getTachoCount()) ) * (Constants.WHEEL_RADIUS);
-			delTheta = temp / Constants.ROBOT_WIDTH;
-			delC = temp / 2;
-			rho = Motor.C.getTachoCount(); lambda = Motor.A.getTachoCount();
 			
+			temp1 = rho - Motor.C.getTachoCount() * Constants.RadDeg_Convert; temp2 = lambda - Motor.A.getTachoCount() * Constants.RadDeg_Convert;
 			
+			delTheta = (temp1 - temp2 ) * (Constants.WHEEL_RADIUS / Constants.ROBOT_WIDTH);
+			delC = (temp1 + temp2 ) * (Constants.WHEEL_RADIUS / 2);
+			rho = Motor.C.getTachoCount() * Constants.RadDeg_Convert; lambda = Motor.A.getTachoCount() * Constants.RadDeg_Convert;
+			
+			/*
 			sums[2] += delTheta;
-			temp = sums[2] + delTheta / 2;
-			sums[1] += delC * Math.sin(temp);
-			sums[0] += delC * Math.cos(temp);
+			temp1 = sums[2] + delTheta / 2;
+			sums[1] += -delC * Math.cos(temp1);
+			sums[0] += -delC * Math.sin(temp1);
+			*/
 
 			synchronized (lock) {
 				// don't use the variables x, y, or theta anywhere but here!
+				
+				/*
 				this.x = sums[0];
 				this.y = sums[1];
-				this.theta = sums[2];
+				this.theta = sums[2] / Constants.RadDeg_Convert;
+				*/
+				
+				sums[2] += delTheta;
+				temp1 = sums[2] + delTheta / 2;
+				this.theta = sums[2] / Constants.RadDeg_Convert;
+				this.y += -delC * Math.cos(temp1);
+				this.x += -delC * Math.sin(temp1);
+				
+				/*
+				 * Defining forward and right to be positive Y and X directions respectively,
+				 * and clockwise as positive Theta
+				 */
 			}
 
 			// this ensures that the odometer only runs once every period
