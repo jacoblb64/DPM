@@ -43,6 +43,7 @@ public class OdometryCorrection extends Thread {
 				if(temp > 100) firstLeg = false;
 				LCD.drawString("fslg: " + firstLeg, 0, 4);
 				
+				//Threshold filtering -- Simple but works under given conditions
 				if(Math.abs(temp) < 5) { //Movement in the Y direction
 					if(this.odometer.getY() > 1 && this.odometer.getY() < 30) {
 						this.odometer.setY(15 + (firstLeg ? -7 : 7));
