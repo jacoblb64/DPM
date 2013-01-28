@@ -24,25 +24,22 @@ public class Odometer extends Thread {
 		theta = 0.0;
 		lock = new Object();
 		
-		Motor.A.resetTachoCount(); Motor.C.resetTachoCount(); //resetting tacho counts
+		Motor.A.resetTachoCount(); Motor.C.resetTachoCount();
+		//resetting tacho counts, this is done in the constructor to avoid locking the wheels while running
 	}
 
 	// run method (required for Thread)
 	public void run() {
 		long updateStart, updateEnd;
-
-		double[] sums = new double[3]; // vector of moving sums, for (x, y, theta)
-		//treating initial position as (0, 0, 0)
 		
-		double lambda = 0.0, rho = 0.0, delTheta, delC, temp1, temp2;
-		
+		double thetaRadians = 0.0, lambda = 0.0, rho = 0.0, delTheta, delC, temp1, temp2;
+		//initializing variables
 		
 		
 		while (true) {
 			updateStart = System.currentTimeMillis();
 			// TODO: put (some of) your odometer code here
-			
-			
+					
 			temp1 = rho - Motor.C.getTachoCount() * Constants.RadDeg_Convert; temp2 = lambda - Motor.A.getTachoCount() * Constants.RadDeg_Convert;
 			
 			delTheta = (temp1 - temp2 ) * (Constants.WHEEL_RADIUS / Constants.ROBOT_WIDTH);
@@ -50,30 +47,30 @@ public class Odometer extends Thread {
 			rho = Motor.C.getTachoCount() * Constants.RadDeg_Convert; lambda = Motor.A.getTachoCount() * Constants.RadDeg_Convert;
 			
 			/*
-			sums[2] += delTheta;
-			temp1 = sums[2] + delTheta / 2;
-			sums[1] += -delC * Math.cos(temp1);
-			sums[0] += -delC * Math.sin(temp1);
-			*/
+			 * Calculations as outlined in the Odometry Tutorial slides on myCourses
+			 * Using the tachometer counts from the wheels, the robot's dimensions, and basic geometry and trigonometry to calculate intermediate values.
+			 * These values are then used to extrapolate values of x, y, and theta, which are treated as moving sums in this case.
+			 * It should be noted that implemented here is an alternative theta whose value is in radians, thetaRadians, for calculations,
+			 * this way, the "proper" theta displayed and kept is in degrees.
+			 * 
+			 * Similar operations on rho and lambda are consolidated onto single lines for readability
+			 */
 
 			synchronized (lock) {
 				// don't use the variables x, y, or theta anywhere but here!
 				
-				/*
-				this.x = sums[0];
-				this.y = sums[1];
-				this.theta = sums[2] / Constants.RadDeg_Convert;
-				*/
-				
-				sums[2] += delTheta;
-				temp1 = sums[2] + delTheta / 2;
-				this.theta = sums[2] / Constants.RadDeg_Convert;
+				thetaRadians += delTheta;
+				temp1 = thetaRadians + delTheta / 2;
+				this.theta = thetaRadians / Constants.RadDeg_Convert;
 				this.y += -delC * Math.cos(temp1);
 				this.x += -delC * Math.sin(temp1);
 				
 				/*
+				 * Math used to extrapolate x, y, and theta from the above calculations.
+				 * 
+				 * Note:
 				 * Defining forward and right to be positive Y and X directions respectively,
-				 * and clockwise as positive Theta
+				 * and clockwise from the Y axis as positive Theta, as outlined in the lab specifications
 				 */
 			}
 

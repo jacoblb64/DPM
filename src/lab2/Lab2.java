@@ -46,6 +46,7 @@ public class Lab2 {
 			odometryDisplay.start();
 			
 			//****************
+			//added to test the odometer correction while the wheels are floated
 			odometryCorrection.start();
 		} else {
 			// start the odometer, the odometry display and (possibly) the
