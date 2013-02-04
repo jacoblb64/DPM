@@ -40,11 +40,11 @@ public class Odometer extends Thread {
 			updateStart = System.currentTimeMillis();
 			// TODO: put (some of) your odometer code here
 					
-			temp1 = rho - Motor.C.getTachoCount() * Constants.RadDeg_Convert; temp2 = lambda - Motor.A.getTachoCount() * Constants.RadDeg_Convert;
+			temp1 = rho - Motor.C.getTachoCount() * Constants.DEGRAD_CONVERT; temp2 = lambda - Motor.A.getTachoCount() * Constants.DEGRAD_CONVERT;
 			
 			delTheta = (temp1 - temp2 ) * (Constants.WHEEL_RADIUS / Constants.ROBOT_WIDTH);
 			delC = (temp1 + temp2 ) * (Constants.WHEEL_RADIUS / 2);
-			rho = Motor.C.getTachoCount() * Constants.RadDeg_Convert; lambda = Motor.A.getTachoCount() * Constants.RadDeg_Convert;
+			rho = Motor.C.getTachoCount() * Constants.DEGRAD_CONVERT; lambda = Motor.A.getTachoCount() * Constants.DEGRAD_CONVERT;
 			
 			/*
 			 * Calculations as outlined in the Odometry Tutorial slides on myCourses
@@ -61,7 +61,7 @@ public class Odometer extends Thread {
 				
 				thetaRadians += delTheta;
 				temp1 = thetaRadians + delTheta / 2;
-				this.theta = thetaRadians / Constants.RadDeg_Convert;
+				this.theta = thetaRadians / Constants.DEGRAD_CONVERT;
 				this.y += -delC * Math.cos(temp1);
 				this.x += -delC * Math.sin(temp1);
 				
