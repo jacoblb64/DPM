@@ -19,10 +19,10 @@ public class WayPoint {
 		
 		double error = destTheta - curTheta;
 		
-		if(error >= -180 && error <= 180) {
+		if (error >= -180 && error <= 180) {
 			return error;
 		}
-		else if(error < -180) {
+		else if (error < -180) {
 			return error + 360;
 		}
 		else {

@@ -14,9 +14,9 @@ public class PathDriver extends Thread{
 	private Odometer odometer;
 	
 	public PathDriver(int path, Odometer odometer) throws Exception{
-		if(path != 1 || path != 2) throw new Exception();
+		if (path != 1 || path != 2) throw new Exception();
 		
-		if(path == 1) {
+		if (path == 1) {
 			wayPoints.push(new WayPoint(60,30));
 			wayPoints.push(new WayPoint(30, 30));
 			wayPoints.push(new WayPoint(30, 60));
