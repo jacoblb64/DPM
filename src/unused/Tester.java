@@ -1,4 +1,6 @@
-package lab3;
+package unused;
+
+import lab3.WayPoint;
 
 public class Tester {
 	

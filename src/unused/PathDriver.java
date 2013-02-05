@@ -1,9 +1,10 @@
-package lab3;
+package unused;
 
 import java.util.Queue;
 
 import lab2.Constants;
 import lab2.Odometer;
+import lab3.WayPoint;
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;

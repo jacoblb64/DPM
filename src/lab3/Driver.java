@@ -1,16 +1,19 @@
 package lab3;
 
 /*
- * SquareDriver.java
+ * add
  */
 
 import java.util.Queue;
 
+import lab1.UltrasonicPoller;
 import lab2.Constants;
 import lab2.Odometer;
 import lejos.nxt.LCD;
 import lejos.nxt.Motor;
 import lejos.nxt.NXTRegulatedMotor;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 
 public class Driver {
 	private static final int FORWARD_SPEED = 250;
@@ -19,12 +22,16 @@ public class Driver {
 	private static WayPoint curPoint = new WayPoint(0,0);
 	private static Queue<WayPoint> wayPoints = new Queue<WayPoint>();
 	private static Odometer odometer;
+	private static boolean isNavigating;
+	private static SensorPort usPort;
+	private static UltrasonicSensor usSensor;
+	private static boolean avoiding = false;
 
 	public static void drive(int path, Odometer od) {
 		// reset the motors
 		for (NXTRegulatedMotor motor : new NXTRegulatedMotor[] { Motor.A, Motor.C }) {
 			motor.stop();
-			motor.setAcceleration(3000);
+			motor.setAcceleration(2000);
 		}
 		
 		odometer = od;
@@ -44,6 +51,10 @@ public class Driver {
 		else {
 			wayPoints.push(new WayPoint(0, 60));
 			wayPoints.push(new WayPoint(60, 0));
+			
+			usPort = SensorPort.S1;
+			usSensor = new UltrasonicSensor(usPort);
+			avoiding = true;
 		}
 
 		// wait 5 seconds
@@ -62,8 +73,11 @@ public class Driver {
 		}
 	}
 	
-	static void travelTo(WayPoint point) {		
-		WayPoint curPoint = new WayPoint(odometer.getX(), odometer.getY());
+	public static void travelTo(WayPoint point) {
+		isNavigating = true;
+		LCD.drawString(point.toString(), 0, 3);
+		
+		curPoint = new WayPoint(odometer.getX(), odometer.getY());
 		double angle = curPoint.getAngle(point, odometer.getTheta());
 		
 		
@@ -73,21 +87,69 @@ public class Driver {
 		
 		
 		turnTo(angle);
-		
+			
 		Motor.A.setSpeed(FORWARD_SPEED);
 		Motor.C.setSpeed(FORWARD_SPEED);
+				
+		if(avoiding) {
+			WayPoint start = curPoint;
+				
+			
+			while (curPoint.getDistance(point) > 3) {
+				
+				Motor.A.forward();
+				Motor.C.forward();
+				
+				LCD.drawString("d:" + usSensor.getDistance(), 10, 3);
 
-		Motor.A.rotate(convertDistance(Constants.WHEEL_RADIUS, curPoint.getDistance(point)), true);
-		Motor.C.rotate(convertDistance(Constants.WHEEL_RADIUS, curPoint.getDistance(point)), false);
+				
+				if (usSensor.getDistance() < 20) {
+					wayPoints.push(new WayPoint(odometer.getX() + 19*Math.sqrt(2), odometer.getY() + 19*Math.sqrt(2)));
+					wayPoints.push(new WayPoint(odometer.getX() + 45, odometer.getY()));
+
+					
+					wayPoints.push(point);
+					
+					isNavigating = false;
+					return;
+				}
+				
+
+				
+				try {
+					Thread.sleep(10);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				curPoint.setX(odometer.getX());
+				curPoint.setY(odometer.getY());
+			}
+			Motor.A.stop();
+			Motor.C.stop();
+		}
+		else {
+			Motor.A.forward();
+			Motor.C.forward();
+			
+			
+			Motor.A.rotate(convertDistance(Constants.WHEEL_RADIUS, curPoint.getDistance(point)), true);
+			Motor.C.rotate(convertDistance(Constants.WHEEL_RADIUS, curPoint.getDistance(point)), false);
+		}
+		
+		isNavigating = false;
 	}
 	
-	static void turnTo(double theta) {
+	public static void turnTo(double theta) {
 		
 		Motor.A.setSpeed(ROTATE_SPEED);
 		Motor.C.setSpeed(ROTATE_SPEED);
 
 		Motor.A.rotate(convertAngle(Constants.WHEEL_RADIUS, Constants.ROBOT_WIDTH, theta), true);
 		Motor.C.rotate(-convertAngle(Constants.WHEEL_RADIUS, Constants.ROBOT_WIDTH, theta), false);
+	}
+	
+	public static boolean isNavigating() {
+		return isNavigating;
 	}
 
 	private static int convertDistance(double radius, double distance) {

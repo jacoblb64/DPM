@@ -1,6 +1,9 @@
+/*
+ * add
+ */
+
 package lab3;
 
-import lab2.Constants;
 
 public class WayPoint {
 	private double x;
