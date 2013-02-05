@@ -7,10 +7,14 @@
 
 package lab3;
 
+import lab1.UltrasonicController;
+import lab1.UltrasonicPoller;
 import lab2.Odometer;
 import lab2.OdometryDisplay;
 import lejos.nxt.Button;
 import lejos.nxt.LCD;
+import lejos.nxt.SensorPort;
+import lejos.nxt.UltrasonicSensor;
 
 public class Lab3 {
 
