@@ -99,7 +99,8 @@ public class Driver {
 				
 				if (usSensor.getDistance() < 30) {
 					wayPoints.push(point);
-					wayPoints.push(new WayPoint(odometer.getX() + 15*Math.sin(odometer.getTheta() - 90), odometer.getY() + 15*Math.cos(90 - odometer.getTheta())));
+					wayPoints.push(new WayPoint(odometer.getX() + 19*Math.sqrt(2), odometer.getY() + 19*Math.sqrt(2)));
+					wayPoints.push(new WayPoint(odometer.getX() + 40, odometer.getY() -5));
 					//wayPoints.push(new WayPoint(60, 60));
 					
 					//avoiding = false;
