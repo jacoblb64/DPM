@@ -23,7 +23,7 @@ public class USLocalizer {
 		this.robot = odo.getTwoWheeledRobot();
 		this.us = us;
 		this.locType = locType;
-		this.nav = new Navigation(odo);
+		this.nav = this.odo.getNavigation();
 		
 		// switch off the ultrasonic sensor
 		us.off();
@@ -64,7 +64,7 @@ public class USLocalizer {
 			double delTheta = (angleA < angleB ? 45 : 225) - ( (angleA + angleB) / 2);
 			
 			// update the odometer position (example to follow:)
-			odo.setPosition(new double [] {0.0, 0.0, (robot.getHeading() + delTheta + 180) % 360}, new boolean [] {false, false, true});
+			odo.setPosition(new double [] {-1.5, -1.5, (robot.getHeading() + delTheta + 180) % 360}, new boolean [] {false, false, true});
 			
 		} else {
 			/*

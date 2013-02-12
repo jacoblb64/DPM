@@ -9,7 +9,7 @@ public class TwoWheeledRobot {
 	private NXTRegulatedMotor leftMotor, rightMotor;
 	private double leftRadius, rightRadius, width;
 	private double forwardSpeed, rotationSpeed;
-	
+		
 	public TwoWheeledRobot(NXTRegulatedMotor leftMotor,
 						   NXTRegulatedMotor rightMotor,
 						   double width,
@@ -107,4 +107,34 @@ public class TwoWheeledRobot {
 		this.rightMotor.flt(true);
 	}
 	
+	public int convertDistance(double radius, double distance) {
+		return (int) ((180.0 * distance) / (Math.PI * radius));
+	}
+
+	public int convertAngle(double radius, double width, double angle) {
+		return convertDistance(radius, Math.PI * width * angle / 360.0);
+	}
+	
+	public void goForward(int distance) {
+		int angle = convertDistance(Constants.WHEEL_RADIUS, (double) distance);
+		rightMotor.rotate(angle, true);
+		leftMotor.rotate(angle, false);
+	}
+	
+	public boolean isMoving() {
+		return (forwardSpeed > 0 || rotationSpeed > 0);
+	}
+	
+	public void setWheelSpeeds(int lSpd, int rSpd) {
+		this.leftMotor.setSpeed(lSpd);
+		this.rightMotor.setSpeed(rSpd);
+		if (lSpd < 0)
+			this.leftMotor.backward();
+		else
+			this.leftMotor.forward();
+		if (rSpd < 0)
+			this.rightMotor.backward();
+		else
+			this.rightMotor.forward();
+	}
 }

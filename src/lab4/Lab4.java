@@ -22,17 +22,22 @@ public class Lab4 {
 			}
 		}).start();
 		
+		
 		if (Button.waitForAnyPress() == Button.ID_LEFT) {
+			LCD.drawString("US FALL", 0, 5);
 			// perform the ultrasonic localization
 			USLocalizer usl = new USLocalizer(odo, us, USLocalizer.LocalizationType.FALLING_EDGE);
 			usl.doLocalization();
 		}
 		else if (Button.waitForAnyPress() == Button.ID_RIGHT) {
+			LCD.drawString("US RISE", 0, 5);
 			// perform the ultrasonic localization
 			USLocalizer usl = new USLocalizer(odo, us, USLocalizer.LocalizationType.RISING_EDGE);
 			usl.doLocalization();
 		}
 		
+		
+		LCD.drawString("LIGHT     ", 0, 5);
 		// perform the light sensor localization
 		LightLocalizer lsl = new LightLocalizer(odo, ls);
 		lsl.doLocalization();			
