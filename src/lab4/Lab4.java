@@ -1,3 +1,10 @@
+/*
+ * Jacob Barnett : 260451446
+ * Haimonti Das : 260445904
+ * 
+ * Group 4, lab 4
+ */
+
 package lab4;
 
 import lab3.Driver;
@@ -21,6 +28,7 @@ public class Lab4 {
 				System.exit(0);
 			}
 		}).start();
+		// added to allow for exiting at any time by pressing the bottom button
 		
 		
 		if (Button.waitForAnyPress() == Button.ID_LEFT) {
@@ -35,9 +43,12 @@ public class Lab4 {
 			USLocalizer usl = new USLocalizer(odo, us, USLocalizer.LocalizationType.RISING_EDGE);
 			usl.doLocalization();
 		}
+		// triggering which US localization type by button
 		
 		
 		LCD.drawString("LIGHT     ", 0, 5);
+		// added printing to show which localizaiton process is running.
+		
 		// perform the light sensor localization
 		LightLocalizer lsl = new LightLocalizer(odo, ls);
 		lsl.doLocalization();			

@@ -106,6 +106,7 @@ public class TwoWheeledRobot {
 		this.leftMotor.flt(true);
 		this.rightMotor.flt(true);
 	}
+	// added for testing Ñ in order to move the robot around
 	
 	public int convertDistance(double radius, double distance) {
 		return (int) ((180.0 * distance) / (Math.PI * radius));
@@ -114,16 +115,19 @@ public class TwoWheeledRobot {
 	public int convertAngle(double radius, double width, double angle) {
 		return convertDistance(radius, Math.PI * width * angle / 360.0);
 	}
+	// added conversions from previous lab for exact movements
 	
 	public void goForward(int distance) {
 		int angle = convertDistance(Constants.WHEEL_RADIUS, (double) distance);
 		rightMotor.rotate(angle, true);
 		leftMotor.rotate(angle, false);
 	}
+	// a simple method to move forward within the guide of the TwoWheeledRobot methodology. This was not used for this lab.
 	
 	public boolean isMoving() {
 		return (forwardSpeed > 0 || rotationSpeed > 0);
 	}
+	// a simple method to return whether the robot is moving. Was used in testing, but not in the final demo.
 	
 	public void setWheelSpeeds(int lSpd, int rSpd) {
 		this.leftMotor.setSpeed(lSpd);
@@ -137,4 +141,5 @@ public class TwoWheeledRobot {
 		else
 			this.rightMotor.forward();
 	}
+	// used to manually set the wheel speeds
 }

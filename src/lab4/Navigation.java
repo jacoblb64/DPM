@@ -32,6 +32,7 @@ public class Navigation {
 		this.robot.setSpeeds(0, 0);
 		
 	}
+	// adapted the travelTo method from the navigation code provided on myCourses
 	
 	public void travelToStraight(double x, double y) {
 		
@@ -48,6 +49,7 @@ public class Navigation {
 		Motor.A.rotate(robot.convertDistance(Constants.WHEEL_RADIUS, distance), true);
 		Motor.C.rotate(robot.convertDistance(Constants.WHEEL_RADIUS, distance), false);
 	}
+	// a simple travelTo derivatve that simply travels straight to a point
 	
 	public void travelStraight(double distance) {
 		
@@ -57,11 +59,13 @@ public class Navigation {
 		Motor.A.rotate(robot.convertDistance(Constants.WHEEL_RADIUS, distance), true);
 		Motor.C.rotate(robot.convertDistance(Constants.WHEEL_RADIUS, distance), false);
 	}
+	// a simple travelTo derivative that just travels forward a set distance
 	
 	public void travelToSimple(double x, double y) {
 		turnToSimple(getHeading(x, y));	
 		travelToStraight(x, y);
 	}
+	// combines the simpler traveling methods into one method.
 	
 	private double getHeading(double x, double y) {
 		double currentX = odo.getX();
@@ -81,6 +85,7 @@ public class Navigation {
 		
 		return heading; 
 	}
+	// returns the correct heading to a provided point
 	
 	public void turnToSimple(double theta) {	
 		// Robot's current angle, in degrees	
@@ -110,6 +115,7 @@ public class Navigation {
 		// Rotate 
 		turnSimple(deltaTheta);
 	}
+	// a simple turning method to turn a given theta
 	
 	public void turnSimple(double theta) {
 		
@@ -119,6 +125,7 @@ public class Navigation {
 		Motor.A.rotate(robot.convertAngle(Constants.WHEEL_RADIUS, Constants.ROBOT_WIDTH, theta), true);
 		Motor.C.rotate(-robot.convertAngle(Constants.WHEEL_RADIUS, Constants.ROBOT_WIDTH, theta), false);
 	}
+	// a simple turning method that turns the robot by a given theta
 	
 	public void turnTo(double angle, boolean stop) {
 		// USE THE FUNCTIONS setForwardSpeed and setRotationalSpeed from TwoWheeledRobot!
@@ -144,10 +151,12 @@ public class Navigation {
 			this.robot.setSpeeds(0, 0);
 		}
 	}
+	// the adapted turnTo method from the code provided on myCourses.
 	
 	public void goForward(double distance) {
 		this.travelTo(Math.cos(Math.toRadians(this.odo.getAng())) * distance, Math.cos(Math.toRadians(this.odo.getAng())) * distance);
 
 	}
+	// the adapted goForward method from the code provided on myCourses. Not used for this lab.
 	
 }
