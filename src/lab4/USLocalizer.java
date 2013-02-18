@@ -100,10 +100,12 @@ public class USLocalizer {
 			
 			robot.setSpeeds(0, 0);
 			
-			double delTheta = (angleA < angleB ? 45 : 225) - ( (angleA + angleB) / 2);
+			double delTheta = (angleA > angleB ? 45 : 225) - ( (angleA + angleB) / 2);
 			
 			// update the odometer position (example to follow:)
-			odo.setPosition(new double [] {0.0, 0.0, (robot.getHeading() + delTheta + 180) % 360}, new boolean [] {false, false, true});
+			odo.setPosition(new double [] {0.0, 0.0, (robot.getHeading() + delTheta + 270)% 360}, new boolean [] {false, false, true});
+
+			// rising works for + 270, though a bit off 
 		}
 	}
 	
