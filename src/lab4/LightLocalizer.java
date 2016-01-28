@@ -32,6 +32,7 @@ public class LightLocalizer {
 		robot.setSpeeds(0, -15);
 		
 		
+		// declaring variables for the rotation process
 		long correctionStart, correctionEnd;
 		int lastLight = 0;
 		double cur = 0.0;
@@ -46,23 +47,30 @@ public class LightLocalizer {
 			if(lastLight == 0) {
 				lastLight = ls.getNormalizedLightValue();
 				continue;
-			}
+			} // initialization, set lastLight then move to next iteration
 			else cur = ls.getNormalizedLightValue() - lastLight;
+			// usual case, calculate the difference
 			
 			isLine = (cur < -45);
 			lastLight = ls.getNormalizedLightValue();
+			// if the difference is large, there's a line, then set the lastLight
+			// only the negative is used to only trigger detection on one side of the line, not both
 			
 			LCD.drawString("iL:" + isLine, 0, 6);
 			LCD.drawString("LV:" + ls.getNormalizedLightValue(), 4, 4);
 			LCD.drawString("c:" + cur, 10, 4);
+			// printing information
 			
 			if (isLine && ( i == 0 || Math.abs(odo.getAng() - angles[i-1]) > 30)) {
+				// only detect one line per 30 degrees, to avoid double detection and false positives
+				
 				Sound.beep();
 				angles[i] = odo.getAng();
 				i++;
 				isLine = false;
 				LCD.drawString("" + angles[i-1], 10, 6);
 				continue;
+				// add the value to the array and increment, then move to the next iteration
 			}
 			
 			// this ensure the odometry correction occurs only once every period
@@ -103,8 +111,10 @@ public class LightLocalizer {
 		
 		nav.travelToSimple(0,2);
 		nav.turnToSimple(5);
+		// values are offset to correct the robot by the same amount every time. From observed trial and error.
 		
 		odo.setPosition(new double [] {0, 0, 0}, new boolean [] {true, true, true});
+		// this position and orientation is 0, 0, 0
 		
 
 	}

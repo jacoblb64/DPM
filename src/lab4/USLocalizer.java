@@ -66,6 +66,16 @@ public class USLocalizer {
 			// update the odometer position (example to follow:)
 			odo.setPosition(new double [] {-1.5, -1.5, (robot.getHeading() + delTheta + 180) % 360}, new boolean [] {false, false, true});
 			
+			/**
+			 * 4 steps:
+			 * 1: make sure there's no wall in front
+			 * 2: detect a wall and store angle
+			 * 3: detect no wall
+			 * 4: detect the other wall and store the angle
+			 * 
+			 * Then, use the two angles to calculate the robot's relative orientation to what should be zero, and set the odometer to that.
+			 */
+			
 		} else {
 			/*
 			 * The robot should turn until it sees the wall, then look for the
@@ -103,9 +113,26 @@ public class USLocalizer {
 			double delTheta = (angleA > angleB ? 45 : 225) - ( (angleA + angleB) / 2);
 			
 			// update the odometer position (example to follow:)
+<<<<<<< HEAD
 			odo.setPosition(new double [] {0.0, 0.0, (robot.getHeading() + delTheta + 270)% 360}, new boolean [] {false, false, true});
 
 			// rising works for + 270, though a bit off 
+=======
+			odo.setPosition(new double [] {0.0, 0.0, (robot.getHeading() + delTheta + 180) % 360 + 360}, new boolean [] {false, false, true});
+			
+			/**
+			 * Similar to the Falling edge methedology:
+			 * 
+			 * 4 steps:
+			 * 1: make sure there's a wall in front
+			 * 2: detect no wall and store angle
+			 * 3: detect a wall
+			 * 4: detect the other no wall (other side of the gap) and store the angle
+			 * 
+			 * Then, use the two angles to calculate the robot's relative orientation to what should be zero, and set the odometer to that.
+			 * This angle is then adjusted by 360 to compensate for the difference pulled by the rising edge calculations.
+			 */
+>>>>>>> fdd04b870d2eb24511d9da67503baeb1f71d58e4
 		}
 	}
 	
@@ -136,6 +163,12 @@ public class USLocalizer {
 		LCD.drawString("dist: " + filteredDistance, 0, 4);
 		
 		return filteredDistance;
+		
+		/**
+		 * I implemented the same standard filter from previous labs here,
+		 * whereby the 255 values are only accepted after consistent occurance 
+		 */
+		
 	}
 
 }
